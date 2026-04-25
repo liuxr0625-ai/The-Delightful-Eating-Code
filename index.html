@@ -545,21 +545,25 @@
 
         // 发送结果到金数据
         function sendResultToJinshuju() {
-            if (!JINSHUJU_ENABLED) return;
-            if (JINSHUJU_FORM_ID === 'YOUR_FORM_ID') {
-                console.warn('请先设置金数据表单ID');
-                return;
-            }
+            
 
             const code = getResultCode();
-            const finalLink = `https://jinshuju.net/f/${JINSHUJU_FORM_ID}?${JINSHUJU_FIELD_NAME}=${encodeURIComponent(code)}`;
-            
-            // 使用图片请求方式发送，不影响页面显示
-            const img = document.createElement('img');
-            img.src = finalLink;
-            img.style.display = 'none';
-            document.body.appendChild(img);
-            setTimeout(() => document.body.removeChild(img), 2000);
+        // 目标 API 地址
+const apiUrl = "https://liuyang.pythonanywhere.com/lxr";
+
+// 发送 GET 请求（自动处理 URL 编码）
+fetch(`${apiUrl}?msg=${encodeURIComponent(code)}`)
+  .then(response => response.json())
+  .then(data => {
+    if (data.status === 'success') {
+      console.log('✅ 提交成功:', data.data);
+    } else {
+      console.error('❌ 提交失败:', data.message);
+    }
+  })
+  .catch(error => {
+    console.error('🌐 网络错误:', error);
+  });
         }
 
         function showResult() {
