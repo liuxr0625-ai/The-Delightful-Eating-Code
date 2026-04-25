@@ -1,0 +1,651 @@
+result_code<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>饮食偏好人格测试 · 吃饭，是很好玩的</title>
+    <style>
+        :root {
+            --bg: #fdf8f3;
+            --card: #ffffff;
+            --primary: #c17f59;
+            --primary-hover: #a86a46;
+            --accent: #d4a574;
+            --accent-light: #f5ebe0;
+            --text: #3e2c1f;
+            --text-light: #6b5a4b;
+            --text-lighter: #8c7b6e;
+            --border: #e8ddd3;
+            --shadow: 0 2px 16px rgba(62, 44, 31, 0.06);
+            --shadow-lg: 0 8px 32px rgba(62, 44, 31, 0.10);
+            --radius: 16px;
+            --radius-sm: 10px;
+            --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', 'Helvetica Neue', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font);
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            line-height: 1.6;
+            -webkit-tap-highlight-color: transparent;
+            background-image: radial-gradient(ellipse at 50% 20%, rgba(209, 165, 116, 0.08) 0%, transparent 70%),
+                radial-gradient(ellipse at 80% 80%, rgba(193, 127, 89, 0.05) 0%, transparent 60%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .page {
+            animation: fadeSlideIn 0.4s ease forwards;
+        }
+        @keyframes fadeSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes pulse {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.03);
+            }
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 32px 28px;
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+        .card.result-card {
+            padding: 28px 24px;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .start-page .icon-row {
+            text-align: center;
+            font-size: 48px;
+            margin-bottom: 8px;
+            letter-spacing: 4px;
+        }
+        .start-page h1 {
+            text-align: center;
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            letter-spacing: 0.5px;
+            color: var(--text);
+        }
+        .start-page .info-text {
+            text-align: center;
+            font-size: 13px;
+            color: var(--text-light);
+            margin-bottom: 6px;
+            line-height: 1.7;
+        }
+        .start-page .course-credit {
+            text-align: center;
+            font-size: 12px;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 2px;
+            letter-spacing: 0.5px;
+        }
+        .start-page .disclaimer {
+            text-align: center;
+            font-size: 11px;
+            color: var(--text-lighter);
+            margin-bottom: 28px;
+            font-style: italic;
+        }
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 14px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 28px;
+            cursor: pointer;
+            letter-spacing: 0.5px;
+            transition: var(--transition);
+            font-family: var(--font);
+            text-align: center;
+        }
+        .btn-primary {
+            background: var(--primary);
+            color: #fff;
+            box-shadow: 0 4px 14px rgba(193, 127, 89, 0.3);
+        }
+        .btn-primary:hover {
+            background: var(--primary-hover);
+            box-shadow: 0 6px 20px rgba(193, 127, 89, 0.4);
+            transform: translateY(-1px);
+        }
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+        .btn-outline {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            margin-top: 12px;
+        }
+        .btn-outline:hover {
+            background: var(--accent-light);
+        }
+
+        .test-page .progress-wrap {
+            margin-bottom: 20px;
+        }
+        .test-page .progress-info {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--text-lighter);
+            margin-bottom: 6px;
+            letter-spacing: 0.3px;
+        }
+        .test-page .progress-bar {
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .test-page .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            border-radius: 3px;
+            transition: width 0.4s ease;
+        }
+        .test-page .question-num {
+            font-size: 12px;
+            color: var(--accent);
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .test-page .question-text {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 22px;
+            line-height: 1.5;
+            color: var(--text);
+            letter-spacing: 0.3px;
+        }
+        .test-page .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .test-page .option-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 15px 18px;
+            font-size: 15px;
+            font-weight: 500;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: #fdfaf7;
+            cursor: pointer;
+            transition: var(--transition);
+            color: var(--text);
+            font-family: var(--font);
+            line-height: 1.5;
+            letter-spacing: 0.2px;
+        }
+        .test-page .option-btn:hover {
+            border-color: var(--accent);
+            background: #fefcf9;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+            transform: translateX(2px);
+        }
+        .test-page .option-btn:active {
+            transform: scale(0.99);
+            background: var(--accent-light);
+            border-color: var(--primary);
+        }
+        .test-page .option-btn.selected {
+            border-color: var(--primary);
+            background: var(--accent-light);
+            font-weight: 600;
+        }
+        .test-page .option-letter {
+            display: inline-block;
+            width: 26px;
+            height: 26px;
+            line-height: 26px;
+            text-align: center;
+            border-radius: 50%;
+            background: var(--accent-light);
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 13px;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+
+        .result-page .result-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .result-page .result-emoji {
+            font-size: 52px;
+            margin-bottom: 4px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        .result-page .result-name {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            color: var(--text);
+            margin-bottom: 4px;
+            line-height: 1.3;
+        }
+        .result-page .result-code {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 3px;
+            margin-bottom: 16px;
+        }
+        .result-page .result-desc {
+            font-size: 15px;
+            color: var(--text);
+            line-height: 1.8;
+            text-align: center;
+            margin-bottom: 24px;
+            padding: 0 4px;
+        }
+        .result-page .dimensions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 24px;
+            padding: 16px;
+            background: #fdfaf7;
+            border-radius: var(--radius-sm);
+        }
+        .result-page .dim-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+        }
+        .result-page .dim-label-left,
+        .result-page .dim-label-right {
+            flex: 0 0 auto;
+            min-width: 40px;
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: 0.5px;
+            text-align: center;
+        }
+        .result-page .dim-label-left {
+            color: var(--primary);
+        }
+        .result-page .dim-label-right {
+            color: var(--text-lighter);
+        }
+        .result-page .dim-bar-wrap {
+            flex: 1;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+        .result-page .dim-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            border-radius: 4px;
+            transition: width 0.6s ease 0.2s;
+        }
+        .result-page .btn-row {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .result-page .btn-row .btn {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                padding: 24px 18px;
+            }
+            .start-page h1 {
+                font-size: 22px;
+            }
+            .test-page .question-text {
+                font-size: 16px;
+            }
+            .test-page .option-btn {
+                font-size: 14px;
+                padding: 13px 14px;
+            }
+            .result-page .result-name {
+                font-size: 22px;
+            }
+            .result-page .result-desc {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="app">
+        <!-- 开始页 -->
+        <div class="page start-page card" id="startPage">
+            <div class="icon-row">🍞 🍲 🧠 ☕</div>
+            <h1>饮食偏好人格测试</h1>
+            <p class="info-text">20道情境选择题 · 约3分钟</p>
+            <p class="course-credit">课程：《吃饭，是很好玩的》</p>
+            <p class="disclaimer">* 仅供娱乐</p>
+            <button class="btn btn-primary" onclick="startTest()">开始测试</button>
+        </div>
+
+        <!-- 测试页 -->
+        <div class="page test-page card" id="testPage" style="display:none;">
+            <div class="progress-wrap">
+                <div class="progress-info">
+                    <span id="progressLabel">第 1 / 20 题</span>
+                    <span id="progressPercent">5%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width:5%;"></div>
+                </div>
+            </div>
+            <div class="question-num" id="questionNum">QUESTION 1</div>
+            <div class="question-text" id="questionText"></div>
+            <div class="options" id="optionsWrap"></div>
+        </div>
+
+        <!-- 结果页 -->
+        <div class="page result-page card result-card" id="resultPage" style="display:none;">
+            <div class="result-header">
+                <div class="result-emoji" id="resultEmoji"></div>
+                <div class="result-name" id="resultName"></div>
+                <div class="result-code" id="resultCode"></div>
+            </div>
+            <div class="result-desc" id="resultDesc"></div>
+            <div class="dimensions" id="dimensionsWrap"></div>
+            <div class="btn-row">
+                <button class="btn btn-primary" onclick="restartTest()">重新测试</button>
+                <button class="btn btn-outline" onclick="shareResult()">📋 复制结果</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 题目已打散顺序，确保同一维度的题目不连续出现
+        const questions = [
+            { id: 1, dim: 0, text: '朋友开玩笑说你是"奶茶脑袋""面包脑袋""火锅脑袋"之类的，你的反应是？', options: [{ letter: 'A', text: '好像确实如此，我对某类食物有长期热情，是可以被标签化的那种', score: 'F' }, { letter: 'B', text: '我不是，我什么都吃，没有哪类食物能长期绑定我', score: 'W' }] },
+            { id: 6, dim: 1, text: '工作或学业压力大到崩溃边缘时，有没有"吃了就会好一点"的特定食物？', options: [{ letter: 'A', text: '有，非常明确，甚至光想到它就会感到安慰', score: 'C' }, { letter: 'B', text: '没有，吃东西解决不了我的情绪问题', score: 'I' }] },
+            { id: 11, dim: 2, text: '深夜你忽然很想吃某种特定的东西（身体并不饿），你通常会？', options: [{ letter: 'A', text: '想办法吃到，立刻行动，非吃到不可', score: 'G' }, { letter: 'B', text: '告诉自己"不是饿，是馋"，通常能压下去', score: 'H' }] },
+            { id: 16, dim: 3, text: '约好一起吃饭的人临时来不了了，你的第一反应是？', options: [{ letter: 'A', text: '瞬间不想去吃了，一个人吃感觉好冷清', score: 'T' }, { letter: 'B', text: '松一口气，难得可以安安静静自己吃一顿', score: 'S' }] },
+            { id: 2, dim: 0, text: '同一家餐厅或同一道菜，你可以连续吃的上限是？', options: [{ letter: 'A', text: '连吃一周以上完全没问题，熟悉感让我安心', score: 'F' }, { letter: 'B', text: '最多两三次，再吃就烦了，必须换着来', score: 'W' }] },
+            { id: 7, dim: 1, text: '你有没有因为情绪不好而明显改变食量或食物选择的经历？', options: [{ letter: 'A', text: '经常，压力大时要么特别想吃某些东西，要么完全不想吃', score: 'C' }, { letter: 'B', text: '很少，我的食量和选择基本不受情绪影响', score: 'I' }] },
+            { id: 12, dim: 2, text: '你如何判断自己"吃够了，该停了"？', options: [{ letter: 'A', text: '身体告诉我的——饱了、满足了，信号来了就停', score: 'G' }, { letter: 'B', text: '大脑告诉我的——计划吃的量完了、热量到了、时间到了', score: 'H' }] },
+            { id: 17, dim: 3, text: '一个人吃饭和有人一起吃饭，哪个状态你更享受？', options: [{ letter: 'A', text: '有人一起，吃是交流时间，边吃边聊才算完整', score: 'T' }, { letter: 'B', text: '一个人，吃是充电时间，专注食物本身更自在', score: 'S' }] },
+            { id: 3, dim: 0, text: '你更喜欢哪种进食节奏？', options: [{ letter: 'A', text: '找到喜欢的就锁定，反复吃，像单曲循环', score: 'F' }, { letter: 'B', text: '尽可能轮换，不想重复，像随机播放', score: 'W' }] },
+            { id: 8, dim: 1, text: '某样食物让你想起一段温暖的记忆或某个人，你吃到它时会？', options: [{ letter: 'A', text: '有明显的被抚慰感，食物确实能击中我心里柔软的地方', score: 'C' }, { letter: 'B', text: '没什么特别感觉，好吃就行了，不会想那么多', score: 'I' }] },
+            { id: 13, dim: 2, text: '你对自己食欲的态度更接近？', options: [{ letter: 'A', text: '相信身体的需求，饿了吃、馋了适当满足，不太压抑', score: 'G' }, { letter: 'B', text: '食欲需要被管理，不能任由它驱动，要有纪律', score: 'H' }] },
+            { id: 18, dim: 3, text: '你在餐厅或食堂看到认识的人独自吃饭，你会？', options: [{ letter: 'A', text: '自然走过去拼桌，一个人吃多没意思', score: 'T' }, { letter: 'B', text: '打个招呼但不会打扰，独自吃饭的快乐我懂', score: 'S' }] },
+            { id: 4, dim: 0, text: '如果有人问你"你最爱吃什么"，你会？', options: [{ letter: 'A', text: '秒答，这个问题我太清楚了，答案长期稳定', score: 'F' }, { letter: 'B', text: '要想一下，或者觉得很难说，取决于当下心情', score: 'W' }] },
+            { id: 9, dim: 1, text: '"治愈系美食"这个概念让你觉得？', options: [{ letter: 'A', text: '完全理解，我有自己的治愈系清单', score: 'C' }, { letter: 'B', text: '有点矫情，食物就是食物，没必要赋予那么多意义', score: 'I' }] },
+            { id: 14, dim: 2, text: '你有没有"本来在控制饮食，结果破功吃了一大堆"的经历？', options: [{ letter: 'A', text: '经常发生，身体常常战胜大脑', score: 'G' }, { letter: 'B', text: '很少，我定了计划基本就能执行', score: 'H' }] },
+            { id: 19, dim: 3, text: '以下哪种情况让你更不自在？', options: [{ letter: 'A', text: '一个人在外就餐，周围都是成双成对或成群结队的', score: 'T' }, { letter: 'B', text: '被迫和不太熟的人一起吃饭，要一直找话题', score: 'S' }] },
+            { id: 5, dim: 0, text: '你如何看待"为了吃某样东西专门跑很远"这种行为？', options: [{ letter: 'A', text: '理解，甚至经常干，为了一口好吃的值得折腾', score: 'F' }, { letter: 'B', text: '不太理解，就近解决不好吗，时间成本太高了', score: 'W' }] },
+            { id: 10, dim: 1, text: '失恋、受挫或人生的低谷期，食物在你生活中的角色会？', options: [{ letter: 'A', text: '变得很重要，可能成为我照顾自己、安慰自己的主要方式之一', score: 'C' }, { letter: 'B', text: '和平时差不多，该吃吃该喝喝，不靠这个', score: 'I' }] },
+            { id: 15, dim: 2, text: '关于"为什么吃"，下面哪种更接近你？', options: [{ letter: 'A', text: '因为身体发出了信号——饿了、馋了、想吃', score: 'G' }, { letter: 'B', text: '因为时间到了/计划该吃了/身体需要补充了，信号来自大脑', score: 'H' }] },
+            { id: 20, dim: 3, text: '如果有一个完全自由、不用社交的休息日，你的进食画面更接近？', options: [{ letter: 'A', text: '还是会约朋友出来吃一顿，或者至少边吃边和人聊天', score: 'T' }, { letter: 'B', text: '完全不约人，自己买菜做给自己吃，或者一个人下馆子', score: 'S' }] }
+        ];
+
+        const personalityData = {
+            'FCGT': { name: '人间烟火信徒', emoji: '🍲🔥', desc: '有忠实的食物，食物是情绪的归宿，跟着身体的感觉吃，还必须有人分享。火锅是信仰，奶茶是仪式，饭搭子是灵魂。一个人吃饭会抑郁，一群人吃饭才叫活着。开心了吃，难过了也吃，人生大事都在餐桌上解决。烟火气是他们和世界连接的方式。' },
+            'FCGS': { name: '孤独的美食家', emoji: '🍞🧘', desc: '有钟情食物也有Comfort Food，但这一切只属于自己。独自探店是最高治愈，一个人默默吃完一整个蛋糕是灵修时刻。不是社恐，是觉得和别人一起吃会稀释食物的神圣感。每一口都是和自己的深度对话。' },
+            'FCHT': { name: '野生美食博主', emoji: '📸🍽️', desc: '有长期钟情的品类，也有情感联结，而且这事儿必须被看见。认真研究面包的筋度、咖啡的萃取参数，探店必写点评，吃饭必出图。饭搭子必须懂行，不然宁缺毋滥。"爱吃什么"在他们这里是一门可以被展示的学问。' },
+            'FCHS': { name: '隐世手艺人', emoji: '🥖🔒', desc: '和FCHT一样用大脑管理着热爱的品类，但不给任何人看。在家默默养天然酵母一个月，成果只给自己品尝。对钟情的食物有洁癖级标准，但对外毫无分享欲。热爱是私密的修行，好吃自己知道就行。' },
+            'FIGT': { name: '出片优先', emoji: '📷✨', desc: '没有Comfort Food，但吃饭必须有伴，打卡必须出片。对某类食物的忠诚更像是社交标签——"我是可颂脑袋"方便组局时快速建立人设。拍完照已经完成了进食意义的70%。' },
+            'FIGS': { name: '口味钉子户', emoji: '🔨🍜', desc: '没有情绪性进食，也不需要社交，但有铁打不动的口味偏好。同一家店同一种盖饭连吃一学期，纯粹因为"懒得换，挺好吃"。他们的"XX脑袋"不是激情，是惯性。独食最自在，规律最安心。' },
+            'FIHT': { name: '五分钟组局王', emoji: '⚡👥', desc: '有"XX脑袋"但和情绪无关，吃饭按计划走但要有人陪。食物偏好是一个高效的约会参数："我是汉堡脑袋，五分钟内能定下来吃什么的那种，你呢？"高效、精准、绝不纠结。' },
+            'FIHS': { name: '自动巡航', emoji: '🚗💨', desc: '有固定口味偏好，但和情绪无关，和社交也无关。到点就吃，吃完就停，内容和时间都是预设好的。身体是一台需要定期维护的设备，他们有固定的保养套餐。一个人吃最快最准最省心。' },
+            'WCGT': { name: 'emo了谁来陪我吃饭', emoji: '😢🍲', desc: '没有固定食物执念，但情绪一低落就必须找人吃饭。吃什么不重要，重要的是对面坐着人。群聊里最高频的一句话是"有人吃饭吗"。食物只是社交的载体，真正的Comfort Food是人。' },
+            'WCGS': { name: '深夜外卖诗人', emoji: '🌙📦', desc: '没有特别钟情的食物，但有Comfort Food，而且是秘密度最高的那一口。压力大的深夜一个人默默点一份不需要说话的外卖，关掉手机。不忠诚于品类，只忠诚于特定心境下的特定口感——今晚要软绵绵的，明晚可能要酥脆的。每一份深夜订单都是一首只有自己读得懂的诗。' },
+            'WCHT': { name: '选餐厅压力怪', emoji: '😰📋', desc: '没有固定执念，但有情绪联结，进食按计划，社交是刚需。他们需要饭搭子来承载情绪，但对吃什么有严格的脑内标准。是朋友圈里最纠结的那个人："都行，但是这个不行，那个也不行。"既要大家开心，又要符合自己的标尺。' },
+            'WCHS': { name: '体面自救指南', emoji: '🧘‍♀️🍽️', desc: '没有特别钟情的食物，但有明确的Comfort Food，进食由大脑规划，全程不需要任何人。压力大时给自己做一顿精确到克的安慰餐，吃完、收拾好、继续面对。整个过程像一个私密的自我修复程序。情绪被安顿得很体面，连崩溃都有流程管理。' },
+            'WIGT': { name: '充电宝型饭搭子', emoji: '🔋👤', desc: '食物就是燃料，没有情绪价值也没有品类执念，但社交是刚需。吃什么都行，你定。主要功能是给饭搭子凑人头和提供情绪价值。别人从食物里获取营养，他们从"有人一起"里获取营养。' },
+            'WIGS': { name: '无情干饭人', emoji: '🍚⚙️', desc: '无执念、无情绪、无社交。一个人吃、按计划吃、吃什么都行。食堂哪个窗口人少排哪个。食物是纯粹的后勤保障，吃完走人，不赋予任何意义。在别人眼里是吃饭机器，在他们自己看来是省事天花板。' },
+            'WIHT': { name: 'AI在食堂', emoji: '🤖🍽️', desc: '没有食物执念，没有情绪联结，进食完全由大脑管控，但偏偏需要一个饭搭子。像AI一样按时按量完成进食任务，旁边坐着的那个人是他们的图灵测试——确认"我有在像人类一样好好吃饭"。' },
+            'WIHS': { name: '这台设备只加98号油', emoji: '⛽🔧', desc: '16种类型中最极致的工具化进食者。没有执念，没有情绪，没有直觉，没有社交。同一份鸡胸肉沙拉连吃一年，因为参数最优。别人问"你爱吃什么"，认真思考后的回答是："蛋白质。"' }
+        };
+
+        let currentQuestionIndex = 0;
+        let dimScores = [0, 0, 0, 0];
+        const dimKeys = [['F', 'W'], ['C', 'I'], ['G', 'H'], ['T', 'S']];
+        const dimLabels = [
+            { left: 'F 信徒', right: 'W 游牧', name: '食物忠诚度' },
+            { left: 'C 抚慰', right: 'I 工具', name: '情绪—食物联结' },
+            { left: 'G 直觉', right: 'H 大脑', name: '决策与身体感知' },
+            { left: 'T 同乐', right: 'S 独处', name: '进食社交倾向' }
+        ];
+
+        // ==================== 金数据配置（已填入） ====================
+        const JINSHUJU_FORM_ID = 'wvRKhA';       // 你的金数据表单ID
+        const JINSHUJU_FIELD_NAME = 'field_1'; // 接收结果的字段名
+        const JINSHUJU_ENABLED = true;           // 已开启数据收集
+        // =================================================================
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+            const target = document.getElementById(pageId);
+            if (target) {
+                target.style.display = 'block';
+                target.style.animation = 'none';
+                target.offsetHeight;
+                target.style.animation = 'fadeSlideIn 0.4s ease forwards';
+            }
+        }
+
+        function startTest() {
+            currentQuestionIndex = 0;
+            dimScores = [0, 0, 0, 0];
+            showPage('testPage');
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = questions[currentQuestionIndex];
+            document.getElementById('questionNum').textContent = 'QUESTION ' + q.id;
+            document.getElementById('questionText').textContent = q.text;
+            document.getElementById('progressLabel').textContent = '第 ' + (currentQuestionIndex + 1) + ' / 20 题';
+            const pct = Math.round(((currentQuestionIndex + 1) / 20) * 100);
+            document.getElementById('progressPercent').textContent = pct + '%';
+            document.getElementById('progressFill').style.width = pct + '%';
+
+            const optionsWrap = document.getElementById('optionsWrap');
+            optionsWrap.innerHTML = '';
+            q.options.forEach((opt) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerHTML = '<span class="option-letter">' + opt.letter + '</span>' + opt.text;
+                btn.addEventListener('click', function() {
+                    selectOption(q, opt, btn);
+                });
+                optionsWrap.appendChild(btn);
+            });
+
+            document.getElementById('testPage').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function selectOption(q, opt, btn) {
+            const allBtns = document.querySelectorAll('#optionsWrap .option-btn');
+            allBtns.forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+
+            const dim = q.dim;
+            if (opt.score === dimKeys[dim][0]) {
+                dimScores[dim] += 1;
+            } else {
+                dimScores[dim] -= 1;
+            }
+
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < questions.length) {
+                    renderQuestion();
+                } else {
+                    showResult();
+                }
+            }, 280);
+        }
+
+        function getResultCode() {
+            let code = '';
+            for (let d = 0; d < 4; d++) {
+                code += dimScores[d] >= 0 ? dimKeys[d][0] : dimKeys[d][1];
+            }
+            return code;
+        }
+
+        function getDimensionPercent(dimIndex) {
+            const pct = Math.round(((dimScores[dimIndex] + 5) / 10) * 100);
+            return Math.max(0, Math.min(100, pct));
+        }
+
+        // 发送结果到金数据
+        function sendResultToJinshuju() {
+            if (!JINSHUJU_ENABLED) return;
+            if (JINSHUJU_FORM_ID === 'YOUR_FORM_ID') {
+                console.warn('请先设置金数据表单ID');
+                return;
+            }
+
+            const code = getResultCode();
+            const finalLink = `https://jinshuju.net/f/${JINSHUJU_FORM_ID}?${JINSHUJU_FIELD_NAME}=${encodeURIComponent(code)}`;
+            
+            // 使用图片请求方式发送，不影响页面显示
+            const img = document.createElement('img');
+            img.src = finalLink;
+            img.style.display = 'none';
+            document.body.appendChild(img);
+            setTimeout(() => document.body.removeChild(img), 2000);
+        }
+
+        function showResult() {
+            sendResultToJinshuju(); // 收集数据
+
+            const code = getResultCode();
+            const data = personalityData[code];
+            if (!data) {
+                alert('无法识别的人格类型，请重试。代码：' + code);
+                return;
+            }
+
+            document.getElementById('resultEmoji').textContent = data.emoji;
+            document.getElementById('resultName').textContent = data.name;
+            document.getElementById('resultCode').textContent = code;
+            document.getElementById('resultDesc').textContent = data.desc;
+
+            const dimsWrap = document.getElementById('dimensionsWrap');
+            dimsWrap.innerHTML = '';
+            for (let d = 0; d < 4; d++) {
+                const pct = getDimensionPercent(d);
+                const label = dimLabels[d];
+                const row = document.createElement('div');
+                row.className = 'dim-row';
+                row.innerHTML = `
+                    <span class="dim-label-left">${label.left}</span>
+                    <div class="dim-bar-wrap">
+                        <div class="dim-bar-fill" style="width:${pct}%;"></div>
+                    </div>
+                    <span class="dim-label-right">${label.right}</span>
+                `;
+                dimsWrap.appendChild(row);
+            }
+
+            showPage('resultPage');
+            document.getElementById('resultPage').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function restartTest() {
+            currentQuestionIndex = 0;
+            dimScores = [0, 0, 0, 0];
+            showPage('startPage');
+            document.getElementById('startPage').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        function shareResult() {
+            const code = getResultCode();
+            const data = personalityData[code];
+            if (!data) return;
+            const shareText = `【饮食偏好人格测试】\n我的类型：${data.name}（${code}）\n${data.desc}\n\n你也来测测？`;
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(shareText).then(() => showToast('✅ 结果已复制，可以分享给朋友啦')).catch(() => fallbackCopy(shareText));
+            } else {
+                fallbackCopy(shareText);
+            }
+        }
+
+        function fallbackCopy(text) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.position = 'fixed';
+            ta.style.left = '-9999px';
+            ta.style.top = '-9999px';
+            document.body.appendChild(ta);
+            ta.focus();
+            ta.select();
+            try { document.execCommand('copy'); showToast('✅ 结果已复制，可以分享给朋友啦'); } catch (e) { alert('复制失败，请手动复制：\n\n' + text); }
+            document.body.removeChild(ta);
+        }
+
+        function showToast(msg) {
+            let toast = document.getElementById('toast');
+            if (!toast) {
+                toast = document.createElement('div');
+                toast.id = 'toast';
+                toast.style.cssText = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#3e2c1f;color:#fff;padding:12px 24px;border-radius:28px;font-size:14px;font-weight:600;z-index:999;opacity:0;transition:opacity 0.35s ease,transform 0.35s ease;pointer-events:none;font-family:var(--font);letter-spacing:0.3px;box-shadow:0 4px 16px rgba(0,0,0,0.25);';
+                document.body.appendChild(toast);
+            }
+            toast.textContent = msg;
+            toast.style.opacity = '1';
+            toast.style.transform = 'translateX(-50%) translateY(0)';
+            clearTimeout(toast._timeout);
+            toast._timeout = setTimeout(() => { toast.style.opacity = '0'; toast.style.transform = 'translateX(-50%) translateY(10px)'; }, 2200);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => showPage('startPage'));
+    </script>
+</body>
+</html>
